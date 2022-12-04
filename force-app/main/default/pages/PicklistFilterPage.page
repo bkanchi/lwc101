@@ -1,0 +1,103 @@
+<apex:page controller="picklistFilterCtrl" >
+    <apex:form >
+        
+        
+        <br>
+    </br>
+    <div id="countrysId">
+        TEST Rsult: <apex:inputText value="{!searchstring}" onkeyup="openList()"  />
+        
+        <apex:outputPanel id="res">
+            <div id="countryId" style="margin-top: 0%;margin-left: 4%;border: none;">
+                
+                <apex:selectList value="{!selectedCountry}" size="1" >
+                    <apex:selectOptions value="{!picklists}"/>
+                </apex:selectList>
+                
+            </div>
+        </apex:outputPanel>
+    </div>
+    <apex:actionfunction action="{!searchResult}" rerender="countryId,res" name="openList"/>
+    
+    <p>
+        This is the end of the line
+    </p>
+    <br>
+</br>   
+<div style="margin-left: 6%;border: solid 1px;width: 31%;border-color: #cdccc9;">
+    
+    <apex:inputText style="width: 99%;border-color: #cdccc9;"  value="{!searchstr}" onkeyup="openList2()"  />
+    <apex:outputPanel style="height:20px" id="pnl">
+        <apex:repeat value="{!picklistMap}" var="acc"><br/>
+            
+            <apex:outputText value="{!acc}" ></apex:outputText> 
+            
+        </apex:repeat>
+        
+        
+    </apex:outputPanel></div> 
+<apex:actionfunction action="{!searchResult2}" rerender="pnl" name="openList2"/>
+
+
+</apex:form>
+
+
+<!-- <apex:form >
+<apex:outputText title="{!acc}"  value="{!acc}"  />
+onkeypress="openList2()" onblur="openList2()"
+Data List: <apex:dataList value="{!accounts}" var="account">
+<apex:outputText value="Test1"/>
+<apex:outputText value="Test2"/>
+<apex:outputText value="Test3"/>
+<apex:outputText value="Test4"/>
+<apex:outputText value="Test5"/>
+</apex:dataList>
+<br>
+</br>
+
+Select Currency:
+<apex:selectList  value="{!selectedCountry}" size="1" >
+<apex:selectOptions value="{!picklists}"/>
+</apex:selectList>
+<apex:outputText value="{!selectedCountry2}" label="You have selected:"/>
+
+
+
+<br>
+</br>
+<br>
+</br>
+
+<div style="position:relative;width:200px;height:25px;border:0;padding:0;margin:0;">
+<select style="position:absolute;top:0px;left:0px;width:200px; height:25px;line-height:20px;margin:0;padding:0;"
+onchange="document.getElementById('displayValue').value=this.options[this.selectedIndex].text; document.getElementById('idValue').value=this.options[this.selectedIndex].value;">
+<option></option>
+<option value="one">one</option>
+<option value="two">two</option>
+<option value="three">three</option>
+</select>
+<input type="text" name="displayValue" id="displayValue" 
+placeholder="add/select a value" onfocus="this.select()"
+style="position:absolute;top:0px;left:0px;width:183px;width:180px\9;#width:180px;height:23px; height:21px\9;#height:18px;border:1px solid #556;" / >
+<input name="idValue" id="idValue" type="hidden"/>
+</div>
+<apex:inputText value="{!searchstring}" onblur="searchTxt();">
+<apex:selectList value="{!selectedCountry2}" multiselect="false" size="1">
+<apex:selectOptions value="{!countriesOptions}"/>
+</apex:selectList></apex:inputText>
+<apex:actionfunction action="{!searchResult}" rerender="frm" name="searchAF"/>
+
+
+<apex:pageBlock title="Test GEO Invoice Report">
+<apex:pageBlockSection columns="1">
+
+<apex:commandButton value="Go" reRender="Render" action="{!CurrencyGenerate}"/>
+</apex:pageBlockSection>
+<apex:outputPanel id="Render">
+<apex:outputText value="selected value:{!selectedCountry}"></apex:outputText>
+</apex:outputPanel>
+
+
+</apex:pageBlock>
+</apex:form>-->
+</apex:page>

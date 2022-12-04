@@ -1,0 +1,11 @@
+<template>
+	<template if:true={showRoomInfo}>
+		<div class="slds-p-around_medium lgc-bg" style='background-color: rgb(177, 177, 177);'>
+			<lightning:card  title="Hello" >
+				<lightning-tile label={meetingRoomInfo.roomName} >
+					<p class="slds-truncate" title={meetingRoomInfo.roomCapacity}>Test Reverted changes: Room Capacity: {meetingRoomInfo.roomCapacity}</p>
+				</lightning-tile>
+			</lightning:card>
+		</div>
+	</template>
+</template>

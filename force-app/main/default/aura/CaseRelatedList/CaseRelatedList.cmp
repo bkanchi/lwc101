@@ -1,0 +1,20 @@
+<aura:component  implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+        <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+
+    <aura:attribute name="setting" type="object"/>
+    <aura:attribute name="relatedObj" type="String" default="Case"/>
+    <aura:attribute name="parentObj" type="String" default="Account"/>
+    
+    <aura:attribute name="recordId" type="Id"/>
+  <c:GenericRelatedListComponent isEditable="true"
+                          recordId = "{!v.recordId}"
+                          headerName="Mass Update Cases"
+                          objectName="Case"
+                          fieldsName="Subject,Type, ClosedDate,AccountId, Account.Name "
+                          
+                          iconName="standard:contact"
+                          referenceFieldMap = "{ AccountId: 'Account.Name' }"
+                          referenceLabelMap="{ AccountId: 'Account Name' }"
+                          />
+
+</aura:component>

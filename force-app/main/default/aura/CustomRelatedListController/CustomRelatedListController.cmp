@@ -1,0 +1,100 @@
+<aura:component controller="CustomRelatedListController" implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="enqList" type = "object"/>
+    <aura:attribute name="isAllSelected" type="boolean" default="false"/>
+    <aura:attribute name="editName" type="String" default="orderNumber"/>
+    <aura:attribute name="editId" type="String" default=""/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+     <aura:attribute name="statusFilters" type="String[]" default="--None--"/>
+    <aura:attribute name="selectedValue" type="String" access="PRIVATE"/>
+    <aura:attribute name="filterValues" type="List" />
+    
+    <div class="slds-box slds-theme_default expand">
+        
+        <div class="slds-p-around_medium">
+            <h3 class="slds-text-heading_large">Enquiry Related List: {!v.enqList.length}</h3>
+        </div>
+        <div class="slds-box">  
+            <div class="slds-scrollable" style="height:20rem;">
+                <div class="slds-p-bottom_medium slds-align_absolute-center">
+                    <lightning:button variant="Neutral" label="Cancel" title="Cancel" onclick="{! c.onCancel }" />
+                    <lightning:button variant="Brand" label="Save" title="Save" onclick="{! c.handleClick }" />
+                    <lightning:button variant="Brand" label="Delete" title="Delete" onclick="{! c.handleClick }" />
+                </div>
+                <table aria-multiselectable="true" class="slds-table slds-table_bordered  slds-table_resizable-cols" role="grid">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="slds-text-align_right" scope="col" style="margin-top: -15px;width:3.25rem">
+                                <div class="slds-checkbox" style="margin-top: -15px;">
+                                    <lightning:input variant="label-hidden" type="checkbox" aura:id="isAllSelect" checked="{!v.isAllSelected}" onchange="{!c.selectAll}"  />
+                                </div>
+                            </th>
+                            <th aria-label="Balance Sheet Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-truncate" title=" Name">
+                                        Name 
+                                    </span>
+                                </div>
+                            </th>
+                            <th aria-label="Balance Sheet Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-truncate" title=" Name">
+                                        Account Name
+                                    </span>
+                                </div>
+                            </th>
+                            <th aria-label="Balance Sheet Name" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                    <span class="slds-truncate" title=" Name">
+                                        Order Number
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.enqList}" var="enq" indexVar="index">
+                            <tr aria-selected="false" class="slds-hint-parent">
+                                <td class="slds-text-align_right" role="gridcell">
+                                    <div class="slds-checkbox" style="margin-right: -15px;">
+                                        <lightning:input aura:id="isSelect" onchange="{!c.allSelected}" checked="{!enq.selected}" value="{!enq.selected}" type="checkbox" name="input1"/>
+                                    </div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-truncate" title="{!enq.Name}">{!enq.opp.Name}</div>
+                                </td>
+                                <td ondblclick="{!c.tdClick}" data-name="accountName" data-label="{!enq.opp.Id}"  role="gridcell">
+                                    <aura:if isTrue="{!and(v.editName == 'accountName', v.editId == enq.opp.Id) }">
+                                        <!--<lightning:input  variant=" label-hidden" name="{!enq.opp.Id}" value="{!enq.opp.Account.Name}"  /> -->
+                                        <c:LookupComponent fieldLabel = "Account" 
+                                                           objectAPIName = "Account"
+                                                           fieldAPIName = "Name"
+                                                           recordLimit = "5"
+                                                           lookupIcon = "standard:contact" 
+                                                           placeholder = "Search Account" 
+                                                           aura:id="lookupValue" 
+                                                           parentRecId="" 
+                                                           Manualchildscreen="true" 
+                                                           label=""/> 
+                                        <aura:set attribute="else">
+                                            <lightning:input readonly = "true"  variant=" label-hidden" name="accountName" value="{!enq.opp.Account.Name}"  />  
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                                <td ondblclick="{!c.tdClick}" data-name="orderNumber" data-label="{!enq.opp.Id}"  role="gridcell">
+                                    <aura:if isTrue="{!and(v.editName == 'orderNumber', v.editId == enq.opp.Id) }">
+                                        <lightning:input  variant=" label-hidden" name="{!enq.opp.Id}" value="{!enq.opp.OrderNumber__c}"  />        
+                                        <aura:set attribute="else">
+                                            <lightning:input readonly = "true"  variant=" label-hidden" name="orderNumber" value="{!enq.opp.OrderNumber__c}"  />  
+                                        </aura:set>
+                                    </aura:if>
+                                </td>
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </div>     
+    </div>
+</aura:component>

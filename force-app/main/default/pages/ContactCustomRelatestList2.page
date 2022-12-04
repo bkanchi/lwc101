@@ -1,0 +1,50 @@
+<apex:page standardController="Contact" extensions="sampleDetailPageCon" lightningStylesheets="true" standardStylesheets="false" 
+           docType="html-5.0"  applyBodyTag="False" >
+    <html>
+        <head>
+                        
+   
+    <style>
+        .fewerMore { display: none;}
+    </style>
+            
+            <apex:slds />
+            <script>
+            function deleteOpp(recId){
+                alert('=============================='+recId)
+                 console.log('=============================='+recId)
+                 delOpp(recId);
+            }
+            </script>
+        </head>
+        <body>
+            
+
+        
+    <apex:form >
+        <apex:actionFunction name="delOpp" action="{!deleteRecord}" rerender="view">     
+            <apex:param id="aname" name="oppId" value="" />
+        </apex:actionFunction>
+        
+        <apex:pageMessages />
+        <apex:detail relatedList="true"></apex:detail>
+        <apex:pageblock id="CustomList" title="Related Opportunities"  >
+            <apex:pageBlockTable value="{!oppz}" var="o" rendered="{!NOT(ISNULL(oppz))}">
+                <apex:column >
+                                    <a id="thePage:theForm:theCommandLink"  href="#" onclick="deleteOpp('{!o.Id}')">Delete</a>
+
+                </apex:column>
+
+                <apex:column value="{!o.Name}"/>
+                <apex:column value="{!o.Account.Name}"/>
+                <apex:column value="{!o.Type}"/>
+                <apex:column value="{!o.Amount}"></apex:column>
+                <apex:column value="{!o.CloseDate}"/>
+            </apex:pageBlockTable>
+            <apex:outputLabel value="No records to display" rendered="{!(ISNULL(oppz))}" styleClass="noRowsHeader"></apex:outputLabel>
+        </apex:pageblock>
+    </apex:form>
+                 </body>
+        
+    </html>
+</apex:page>

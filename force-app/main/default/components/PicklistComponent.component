@@ -1,0 +1,26 @@
+<apex:component >
+    <script>
+    function get_data(){
+        var val = document.getElementById("browser").value;
+        alert(val);
+        selectedVal = val;
+        console.log(selectedVal);
+        alert(selectedVal);
+    }
+    </script>
+    <apex:attribute name="accList" description="This is the value for the component" type="Account[]" />
+    <apex:attribute name="PickListData" description="This is the value for the component" type="SelectOption[]" />
+    <apex:attribute name="selectedVal" description="Selected value" type="String" />
+    <label for="browser">Country of Origin</label>
+    <input list="browsers" name="browser" id="browser" onChange="get_data()"/>
+    <datalist id="browsers">
+        <apex:repeat value="{!PickListData}" var="acc">
+            <option value="{!acc.value}">{!acc.label}</option>
+        </apex:repeat>
+      <!--<option value="Edge"/>
+        <option value="Firefox"/>
+        <option value="Chrome"/>
+        <option value="Opera"/>
+        <option value="Safari"/>-->
+  </datalist>
+</apex:component>

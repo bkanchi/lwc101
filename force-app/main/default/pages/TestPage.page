@@ -1,0 +1,26 @@
+<apex:page controller="sample1xxx"> 
+ <apex:form >
+     <apex:pageBlock >
+      <apex:pageBlockSection title="Choose The Object From Here" >
+       <apex:pageBlockSectionItem >
+        <apex:selectList size="1" value="{!selectedObject}" id="myPicklist"   >
+         <apex:selectOptions value="{!nameOfObjects}" />
+         <apex:actionsupport event="onchange" reRender="pb1" action="{!showFields}" /> 
+        </apex:selectList>
+       </apex:pageBlockSectionItem>
+      </apex:pageBlockSection>  
+     </apex:pageBlock>
+     
+     <apex:pageBlock id="pb1"  >
+     <apex:pageBlockSection columns="3" title="Show the fields">
+       <apex:repeat value="{!newNameOfFields}" var="f">
+        <apex:inputField value="{!objectName[f]}"/>
+       </apex:repeat>
+     </apex:pageBlockSection> 
+     <apex:pageBlockSection >   
+     </apex:pageBlockSection> 
+      <apex:commandButton value="Reset" action="{!cancel}" immediate="true" />
+     </apex:pageBlock>
+     
+    </apex:form>    
+</apex:page>

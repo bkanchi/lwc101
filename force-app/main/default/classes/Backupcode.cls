@@ -1,0 +1,339 @@
+public class Backupcode {
+/*
+ <aura:component controller="GenericRelatedListController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" >
+    
+    <!-- Attributes -->
+    <aura:attribute name="objectName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="fieldsName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="headerName" 	type="String" required="true" access="global"/>
+    <aura:attribute name="isEditable" 	type="Boolean" 	access="global" default="false" />
+    <aura:attribute name="iconName" 	type="String" 	access="global" default="standard:contact" />
+    
+    <aura:attribute name="records" 		type="List" access="private" />
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="recordsCopy" 	type="List" access="private" />
+    <aura:attribute name="fields" 		type="List" access="private" />
+    
+    <aura:attribute name="recordsToDel"		type="List" access="private" />
+    <aura:attribute name="referenceFieldMap" type="Map" access="global" />
+    <aura:attribute name="referenceLabelMap" type="Map" access="global" />
+    <aura:attribute name="isSelectedAll" type="boolean" default="false"/>
+    
+    
+    <!-- Events -->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:handler event="force:refreshView" action="{!c.doInit}" />
+    
+    
+    <div><div class="ARL">
+        <div class="headerDiv slds-clearfix">
+            <div class="slds-float_left slds-p-around_xx-small">
+                <span>
+                    <lightning:icon iconName="{!v.iconName}" alternativeText="icon" size="small" />
+                </span>
+                <span class="slds-p-around_small">{!v.headerName}&nbsp;({!v.records.length})</span>
+            </div>
+            <div class="slds-float_right">
+                <lightning:buttonIcon variant="brand" iconName="utility:page" alternativeText="Open" onclick="{!c.OpenNew}"/>
+                <lightning:buttonIcon variant="brand" iconName="utility:refresh" alternativeText="refresh" onclick="{!c.doInit}"/>
+                <lightning:buttonIcon variant="brand" iconName="utility:delete" alternativeText="Delete" onclick="{!c.deleteSelected}"/>
+            </div>
+        </div>
+        <div class="childTable">
+            <table class="customDataTable slds-table slds-table_bordered slds-table_edit " role="grid">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th>
+                            <lightning:input variant="label-hidden" onchange="{!c.selectAll}" type="checkbox" aura:id="isAllSelect" checked="{!v.isSelectedAll}" />
+                            
+                        </th>
+                        <aura:iteration items="{!v.fields}" var="field">
+                            <th>
+                                <span>{!field.label}</span>
+                            </th>
+                        </aura:iteration>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.records}" var="rcrd" indexVar="index">
+                        <tr class = "{v.crcd.Id}" ondblclick="{!c.editRow2}">
+                            <td>
+                                <lightning:input aura:id="isSelect" onchange="{!c.isSelected}"  value="{!rcrd.Id}" type="checkbox" name="input1"/>
+                                
+                            </td>
+                            
+                            <aura:iteration items="{!rcrd.record}" var="data">
+                                
+                                <td  class="{!if(and(rcrd.editMode, data.isEdit), '', '')}">
+                                    <aura:if isTrue="{!and(data.ltngType ne 'picklist', data.ltngType ne 'checkbox', data.ltngType ne 'reference')}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <aura:if isTrue="{!data.ltngType eq 'reference'}">
+                                                <aura:if isTrue="{!data.value != ''}">
+                                                    <lightning:formattedUrl value="{!'/' + data.valueRefId}" title="{!data.value}" label="{!data.value}" target="_blank" />
+                                                </aura:if>
+                                                <aura:set attribute="else">
+                                                    <lightning:input type="{!data.ltngType}"
+                                                                     variant="label-hidden"
+                                                                     value="{!data.value}"
+                                                                     name="{!rcrd.Id}"
+                                                                     validity="false"/>
+                                                </aura:set>
+                                                
+                                            </aura:if>
+                                            
+                                            
+                                            <aura:set attribute="else">
+                                                <aura:if isTrue="{!data.ltngType eq 'text'}">
+                                                    <aura:if isTrue="{!data.label eq 'Name'}">
+                                                        <lightning:formattedUrl value="{!'/' + rcrd.Id}" title="{!data.value}" label="{!data.value}" target="_blank" />
+                                                        <aura:set attribute="else">
+                                                            <span>{!data.value}</span>
+                                                        </aura:set>
+                                                        
+                                                    </aura:if>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'id'}">
+                                                    <span>{!data.value}</span>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'tel'}">
+                                                    <lightning:formattedPhone value="{!data.value}" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'email'}">
+                                                    <lightning:formattedEmail value="{!data.value}" hideIcon="true"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'url'}">
+                                                    <lightning:formattedUrl value="{!data.value}" target="_blank" />
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'date'}">
+                                                    <lightning:formattedDateTime value="{!data.value}"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'datetime'}">
+                                                    <lightning:formattedDateTime value="{!data.value}" year="numeric" month="numeric" day="numeric" hour="2-digit"
+                                                                                 minute="2-digit" timeZoneName="short" hour12="true"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'number'}">
+                                                    <lightning:formattedNumber value="{!data.value}"/>
+                                                </aura:if>
+                                                <aura:if isTrue="{!data.ltngType eq 'time'}">
+                                                    <lightning:formattedTime value="{!data.value}" />
+                                                </aura:if>
+                                                <!-- <aura:if isTrue="{!data.ltngType eq 'reference'}">
+                                                    <lightning:formattedUrl value="{!'/' + data.valueRefId}" title="{!data.value}" label="{!data.value}" target="_blank" />
+                                                </aura:if>-->
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <aura:if isTrue="{!data.ltngType eq 'picklist'}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <lightning:combobox name="{!rcrd.Id}" class="ComboClass" variant="label-hidden" value="{!data.value}" options="{!data.picklistOptions}" />
+                                            <aura:set attribute="else">
+                                                <span>{!data.value}</span>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <aura:if isTrue="{!data.ltngType eq 'checkbox'}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <lightning:input type="checkbox" name="{!rcrd.Id}" checked="{!data.value}" variant="label-hidden"/>
+                                            <aura:set attribute="else">
+                                                <lightning:input type="checkbox" name="{!rcrd.Id}" checked="{!data.value}" disabled="true" variant="label-hidden"/>
+                                            </aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                    <!-- Process Reference Fields-->
+                                    <aura:if isTrue="{!data.ltngType eq 'reference'}">
+                                        <aura:if isTrue="{!and(rcrd.editMode, data.isEdit)}">
+                                            <!--<c:LookupComponent fieldLabel = "Account" 
+                                                               objectAPIName = "Account"
+                                                               fieldAPIName = "Name"
+                                                               recordLimit = "5"
+                                                               lookupIcon = "standard:contact" 
+                                                               placeholder = "Search Account" 
+                                                               aura:id="lookupValue" 
+                                                               parentRecId="" 
+                                                               Manualchildscreen="true" 
+                                                               label=""/> -->
+                                            <aura:set attribute="else">
+                                                <aura:if isTrue="{!and(data.value != null,data.value != '')}">
+                                                    <lightning:formattedUrl value="{!'/' + data.valueRefId}" title="{!data.value}" label="{!data.value}" target="_blank" />
+                                                </aura:if>
+                                                <!--<lightning:input type="checkbox" name="{!rcrd.Id}" checked="{!data.value}" disabled="true" variant="label-hidden"/>
+                                            --></aura:set>
+                                        </aura:if>
+                                    </aura:if>
+                                </td>
+                            </aura:iteration>
+                            
+                            <aura:if isTrue="{!v.isEditable}">
+                                <aura:if isTrue="{!!rcrd.editMode}">
+                                    <td class="slds-truncate">
+                                        <lightning:buttonIcon name="{!rcrd.Id}" onclick="{!c.editRow}" iconName="utility:edit" variant="container" />
+                                    </td>
+                                    <aura:set attribute="else">
+                                        <td class="slds-truncate">
+                                            <lightning:buttonIcon name="{!rcrd.Id}" class="checkIco" onclick="{!c.saveRow}" iconName="utility:check" alternativeText="Save" />&nbsp;
+                                            <lightning:buttonIcon name="{!rcrd.Id}" class="closeIco" onclick="{!c.resetRow}" iconName="utility:close" alternativeText="Reset" />
+                                        </td>
+                                    </aura:set>
+                                </aura:if>
+                            </aura:if>
+                            
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+        </div></div>
+</aura:component>
+
+----({
+    doInit : function(component, event, helper) {
+        var objectName = component.get('v.objectName');
+        var fieldsName = component.get('v.fieldsName');
+        var recordId = component.get('v.recordId');
+        var refFields = component.get('v.referenceFieldMap'); 
+        var refLabels = component.get('v.referenceLabelMap'); 
+        
+        if(!$A.util.isEmpty(objectName) && !$A.util.isEmpty(fieldsName) && !$A.util.isEmpty(recordId)) {
+            helper.doInitHelper(component, helper, recordId, objectName, fieldsName, refFields, refLabels);
+        }
+         component.set('v.isSelectedAll', false);
+       
+    },
+    OpenNew: function(component, event, helper){
+        var evt = $A.get("e.force:navigateToComponent");
+        evt.setParams({
+            componentDef : "c:EnqCustomRelatedList",
+            componentAttributes: {
+                recordId : component.get("v.recordId"),
+                 headerName : component.get("v.headerNamed"),
+                 objectName : component.get("v.objectName"),
+                 fieldsName : component.get("v.fieldsName"),
+                 iconName : component.get("v.iconName"),
+                 referenceLabelMap : component.get("v.referenceLabelMap"),
+                 referenceFieldMap : component.get("v.referenceFieldMap")
+                
+            }
+        });
+        evt.fire();
+    },
+    editRow2: function (component, event, helper) {
+        var rowId = event.target.id;
+         console.log(event.targe);
+        console.log('rowId===='+rowId);
+        var records = component.get('v.records');
+        var rowIndex = records.findIndex(x => x.Id === rowId);
+        if (rowIndex != -1) {
+            records[rowIndex].editMode = true;
+        }
+        component.set('v.records', records);
+    },
+    editRow: function (component, event, helper) {
+        var rowId = event.getSource().get('v.name');
+        var records = component.get('v.records');
+        var rowIndex = records.findIndex(x => x.Id === rowId);
+        if (rowIndex != -1) {
+            records[rowIndex].editMode = true;
+        }
+        component.set('v.records', records);
+    },
+    
+    resetRow: function (component, event, helper) {
+        var rowId = event.getSource().get('v.name');
+        var resetRow;
+        
+        var recordsCopy = component.get('v.recordsCopy');
+        var rowIndex = recordsCopy.findIndex(x => x.Id === rowId);
+        if (rowIndex != -1)
+            resetRow = JSON.parse(JSON.stringify(recordsCopy[rowIndex]));
+        
+        var records = component.get('v.records');
+        var index = records.findIndex(x => x.Id === rowId);
+        if (index != -1)
+            records[index] = resetRow;
+        
+        component.set('v.records', records);
+    },
+    
+    saveRow: function (component, event, helper) {
+        var recordObj;
+        var recordId = event.getSource().get('v.name');
+        var records = component.get('v.records');
+        var index = records.findIndex(x => x.Id === recordId);
+        if (index != -1)
+            recordObj = records[index];
+        
+        console.log(recordObj);
+        
+        for(var i = 0; i < recordObj.record.length; i++) {
+            if(recordObj.record[i].dataType == 'DATETIME') {
+                recordObj.record[i].value = $A.localizationService.formatDate(recordObj.record[i].value, "yyyy-MM-dd HH:mm:ss");
+            }
+        }
+        helper.saveRowHelper(component, recordId, recordObj);
+    },
+    isSelected : function(component, event, helper) {
+        var sel= component.find("isSelect");
+        var delList =  component.get("v.recordsToDel");
+        console.log('==========delList============'+delList.length);
+        var records = component.get('v.records');
+        console.log('==============records========'+records.length);
+        for (var i=0; i<sel.length; i++) {
+            if(sel[i].get('v.checked') && delList.indexOf(sel[i].get('v.value')) === -1){
+                delList.push(sel[i].get('v.value')); 
+            }
+        }
+        
+        if(delList.length === records.length){
+            component.set("v.isSelectedAll",true);
+        } else {
+            component.set("v.isSelectedAll",false);
+        }
+        console.log('==========delList============'+delList.length);
+    },
+    selectAll:function(component, event, helper){
+        var sel= component.find("isSelect");
+        var allSel= component.get("v.isSelectedAll");
+        var delList =  component.get("v.recordsToDel");
+        var records = component.get('v.records');
+        console.log('==========allSel============'+allSel);
+        
+        console.log(sel);
+        for (var i=0; i<sel.length; i++) {
+            sel[i].set("v.checked",allSel);
+        }
+        
+    },
+    deleteSelected : function(component, event, helper) {
+        var sel= component.find("isSelect");
+        var delList =  component.get("v.recordsToDel");
+        var delList =  component.get("v.recordsToDel");
+        var objectApiName =  component.get("v.objectName");
+        var delLst = [];
+        console.log('==========delLst new============');
+        for (var i=0; i<sel.length; i++) {
+            console.log(sel[i]);
+            if(sel[i].get('v.checked') ){
+                delLst.push(sel[i].get('v.value')); 
+            }
+        }
+        
+        
+        console.log('==========delList============'+delLst.length);
+        if(delLst.length > 0){
+           
+            }
+        });
+            $A.enqueueAction(action);
+        } else {
+            helper.showToast('Error', 'No Record to Delete');
+            
+        }
+        
+        
+    }
+})
+
+
+*/
+}

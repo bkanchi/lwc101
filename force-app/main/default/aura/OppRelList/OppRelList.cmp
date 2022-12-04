@@ -1,0 +1,12 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+      <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="recordId" type="Id"/>
+
+    <c:OppCustomRelatedList isEditable="true"
+                            recordId = "{!v.recordId}"
+                            headerName="Opportunities"
+                            objectName="Opportunity"
+                            fieldsName="Name,Accountid,Account.Name,StageName,Type,ownerId,Owner.Name,Leadsource,createddate,OrderNumber__c"
+                            iconName="standard:contact"
+                            />
+</aura:component>

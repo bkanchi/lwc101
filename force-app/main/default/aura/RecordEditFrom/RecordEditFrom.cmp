@@ -1,0 +1,45 @@
+<aura:component>
+    <!--lightningRecEditFormComp-->
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    <aura:if isTrue="{!!v.saved}">
+        <lightning:recordEditForm
+                                  aura:id="createAccountForm"
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  
+                                  objectApiName="Account">
+            
+            <lightning:messages />
+            <div class="slds-grid">
+                <div class="slds-col slds-size_1-of-4">
+                    <!-- Your lightning:inputField components here -->
+                    <lightning:inputField required="true" fieldName="Name" />
+                    <lightning:inputField fieldName="AccountNumber" />
+                    <lightning:inputField fieldName="Type" />
+                    <lightning:inputField fieldName="Industry " />
+                </div>
+                <div class="slds-col slds-size_1-of-4">
+                    <!-- More lightning:inputField components here -->
+                    <lightning:inputField fieldName="BillingStreet" />
+                    <lightning:inputField fieldName="BillingCity" />
+                    <lightning:inputField fieldName="BillingState" />
+                </div>
+            </div>
+            
+            
+            <div class="slds-m-top_medium">
+                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Save" />
+            </div>
+        </lightning:recordEditForm>
+        <aura:set attribute="else">
+            <p>Saved!</p>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

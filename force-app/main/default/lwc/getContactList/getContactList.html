@@ -1,0 +1,33 @@
+<template>
+    <lightning-card title="Related Contacts" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+            <template if:true={contacts.data}>
+                <template for:each={contacts.data} for:item="contact">
+                    <p key={contact.Id}>{contact.name}</p>
+                </template>
+                <template iterator:it={contacts.data}>
+                    <li class="slds-item" style="list-style-type: none;" key={it.value.Id}>
+                        <article class="slds-tile slds-tile_board">
+                            <h3 class="slds-tile__title slds-truncate" title="Anypoint Connectors"><a
+                                    href="javascript:void(0);">{it.value.Name}</a></h3>
+                            <div class="slds-tile__detail">
+                                <ul class="slds-list_horizontal slds-has-dividers_right">
+                                    <li class="slds-item">Title: {it.value.Title}</li>
+                                </ul>
+                                <ul class="slds-list_horizontal slds-has-dividers_right">
+                                    <li class="slds-item">Phone: {it.value.Phone}</li>
+                                </ul>
+                                <ul class="slds-list_horizontal slds-has-dividers_right">
+                                    <li class="slds-item">Email: {it.value.Email}</li>
+                                </ul>
+                            </div>
+                        </article>
+                    </li>
+                </template>
+            </template>
+            <template if:true={contacts.error}>
+                <p>{contacts.error}</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

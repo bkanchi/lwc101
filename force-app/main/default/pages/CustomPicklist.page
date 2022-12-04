@@ -1,0 +1,48 @@
+<apex:page controller="CustomPicklistController">
+     <script>
+    function get_data(){
+        var val = document.getElementById("browser").value;
+        // alert(val);
+        selectedVal = val;
+        console.log(selectedVal);
+        // alert(selectedVal);
+        passToController(selectedVal);
+
+    }
+    </script>
+    
+    <apex:form >
+        
+        <label for="browser">Country of Origin</label>
+        <input list="browsers" name="browser" id="browser" value="{!searchstring}" onChange="get_data()"/>
+        <datalist id="browsers">
+            <apex:repeat value="{!accounts2}" var="acc">
+                <option value="{!acc.value}">{!acc.label}</option>
+            </apex:repeat>
+        </datalist>
+        
+        
+        <apex:outputPanel id="test">
+           TEST: <apex:outputText value="{!searchstring}"   />
+            
+        </apex:outputPanel>
+        <apex:actionFunction action="{!searchResult}" name="passToController" rerender="test">
+            <apex:param name="firstParam" assignTo="{!selectedValue}" value="" />
+
+        </apex:actionFunction>
+        
+
+        <!--    TEST Rsult: <apex:inputText value="{!searchstring}" onkeyup="openList()"  />
+
+<apex:dataList value="{!accounts}" var="account">
+<apex:outputText value="{!account.Name}"/>
+</apex:dataList>
+
+
+<apex:actionfunction action="{!searchResult}" rerender="countryId,res" name="openList"/>
+--> <br></br> 
+    <!--  <c:PicklistComponent accList="{!accounts}" PickListData="{!accounts2}" selectedVal="{!searchstring}"  ></c:PicklistComponent>
+TEST: <apex:outputText value="{!searchstring}"/>
+-->
+</apex:form>
+</apex:page>
