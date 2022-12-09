@@ -2,7 +2,7 @@ public with sharing class ContactTriggerHelper {
      //public class applicationException extends Exception {}
 
 
-    public void updateConNameStrOnAccount(List<Contact> contactList, Map<Id,Contact> oldContactMap ){
+    public static void updateConNameStrOnAccount(List<Contact> contactList, Map<Id,Contact> oldContactMap ){
         try {
             // Create a Set of AccountIds from the New or Updated contacts
              
